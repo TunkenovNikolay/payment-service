@@ -40,47 +40,40 @@ public class HttpServer {
 
             String inFileName = getFileNameFromRequest(in);
 
-            if (!isNullOrBlank(inFileName)) {
-                String directory = "simple-http-server/static";
-                Path filePath = Paths.get(directory, inFileName).normalize().toAbsolutePath();
-                Path staticDirPath = Paths.get(directory).toAbsolutePath();
+            String directory = "simple-http-server/static";
+            Path filePath = Paths.get(directory, inFileName).normalize().toAbsolutePath();
+            Path staticDirPath = Paths.get(directory).toAbsolutePath();
 
-                if (!filePath.startsWith(staticDirPath)) {
-                    return;
+            if (!filePath.startsWith(staticDirPath)) {
+                return;
+            }
+
+            if (Files.exists(filePath) && Files.isRegularFile(filePath)) {
+                byte[] fileContent;
+
+                try (BufferedInputStream ignored = new BufferedInputStream(Files.newInputStream(filePath))) {
+                    fileContent = Files.readAllBytes(filePath);
                 }
 
-                if (Files.exists(filePath) && Files.isRegularFile(filePath)) {
-                    byte[] fileContent;
+                String contentType = getContentType(inFileName);
+                long fileSize = Files.size(filePath);
 
-                    try (BufferedInputStream ignored = new BufferedInputStream(Files.newInputStream(filePath))) {
-                        fileContent = Files.readAllBytes(filePath);
-                    }
-
-                    String contentType = getContentType(inFileName);
-                    long fileSize = Files.size(filePath);
-
-                    out.write("HTTP/1.1 200 OK\r\n");
-                    out.write("Content-Type: " + contentType + "; charset=UTF-8\r\n");
-                    out.write("Content-Length: " + fileSize + "\r\n");
-                    out.write("\r\n");
-                    out.write(new String(fileContent, StandardCharsets.UTF_8));
-                } else {
-                    String htmlResponse = "<html><body><h1>" + "404 File Not Found:" + "</h1><p>" + inFileName + "</p></body></html>";
-                    out.write("HTTP/1.1 404 File Not Found:\r\n");
-                    out.write("Content-Type: " + "Content-Type: text/html\r\n");
-                    out.write("Content-Length: " + htmlResponse.getBytes().length + "\r\n");
-                }
+                out.write("HTTP/1.1 200 OK\r\n");
+                out.write("Content-Type: " + contentType + "; charset=UTF-8\r\n");
+                out.write("Content-Length: " + fileSize + "\r\n");
+                out.write("\r\n");
+                out.write(new String(fileContent, StandardCharsets.UTF_8));
+            } else {
+                String htmlResponse = "<html><body><h1>" + "404 File Not Found:" + "</h1><p>" + inFileName + "</p></body></html>";
+                out.write("HTTP/1.1 404 File Not Found:\r\n");
+                out.write("Content-Type: " + "Content-Type: text/html\r\n");
+                out.write("Content-Length: " + htmlResponse.getBytes().length + "\r\n");
             }
 
             out.flush();
             clientSocket.close();
         }
     }
-
-    private static boolean isNullOrBlank(String str) {
-        return str == null || str.isBlank();
-    }
-
 
     private static String getFileNameFromRequest(BufferedReader in) throws IOException {
         String request = in.readLine();
