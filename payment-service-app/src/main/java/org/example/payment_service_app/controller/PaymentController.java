@@ -30,9 +30,6 @@ public class PaymentController {
 
     @GetMapping("/")
     public ResponseEntity<List<PaymentDto>> getPayments() {
-        List<PaymentDto> payments = paymentService.getAllPaymentsDto();
-        return payments.isEmpty()
-                ? ResponseEntity.notFound().build()
-                : ResponseEntity.ok(payments);
+        return ResponseEntity.ok(paymentService.getAllPaymentsDto());
     }
 }
