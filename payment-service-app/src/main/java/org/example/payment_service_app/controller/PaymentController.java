@@ -23,7 +23,7 @@ public class PaymentController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PaymentDto> getPayment(@PathVariable long id) {
+    public ResponseEntity<PaymentDto> getPayment(@PathVariable Long id) {
         try {
             PaymentDto payment = paymentAdapter.getPaymentById(id);
             return ResponseEntity.ok(payment);
