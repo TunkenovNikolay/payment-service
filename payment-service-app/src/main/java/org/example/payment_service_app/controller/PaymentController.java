@@ -1,6 +1,6 @@
 package org.example.payment_service_app.controller;
 
-import org.example.payment_service_app.adpter.PaymentAdapter;
+import org.example.payment_service_app.adapter.PaymentAdapter;
 import org.example.payment_service_app.model.dto.PaymentDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

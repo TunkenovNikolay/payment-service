@@ -1,4 +1,4 @@
-package org.example.payment_service_app.adpter;
+package org.example.payment_service_app.adapter;
 
 import org.example.payment_service_app.mapper.PaymentMapper;
 import org.example.payment_service_app.model.dto.PaymentDto;
