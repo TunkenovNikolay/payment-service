@@ -1,7 +1,7 @@
 package org.example.payment_service_app.controller;
 
-import org.example.payment_service_app.adapter.PaymentAdapter;
 import org.example.payment_service_app.model.dto.PaymentDto;
+import org.example.payment_service_app.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,18 +14,18 @@ import java.util.List;
 @RestController
 @RequestMapping("/payments")
 public class PaymentController {
-    private final PaymentAdapter paymentAdapter;
+    private final PaymentService paymentService;
 
     @Autowired
-    public PaymentController(PaymentAdapter paymentAdapter) {
-        this.paymentAdapter = paymentAdapter;
+    public PaymentController(PaymentService paymentService) {
+        this.paymentService = paymentService;
 
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<PaymentDto> getPayment(@PathVariable Long id) {
         try {
-            PaymentDto payment = paymentAdapter.getPaymentById(id);
+            PaymentDto payment = paymentService.getPaymentById(id);
             return ResponseEntity.ok(payment);
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
@@ -34,6 +34,6 @@ public class PaymentController {
 
     @GetMapping
     public ResponseEntity<List<PaymentDto>> getPayments() {
-        return ResponseEntity.ok(paymentAdapter.getAllPayments());
+        return ResponseEntity.ok(paymentService.getAllPayments());
     }
 }

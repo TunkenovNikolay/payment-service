@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 @Component
 public class PaymentMapper {
 
-    public static PaymentDto convertToDto(Payment payment) {
+    public PaymentDto convertToDto(Payment payment) {
         if (payment == null) {
             return null;
         }
@@ -22,13 +22,13 @@ public class PaymentMapper {
         return dto;
     }
 
-    public static List<PaymentDto> convertToDtoList(List<Payment> payments) {
+    public List<PaymentDto> convertToDtoList(List<Payment> payments) {
         if (payments == null || payments.isEmpty()) {
             return List.of();
         }
 
         return payments.stream()
-                .map(PaymentMapper::convertToDto)
+                .map(this::convertToDto)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
