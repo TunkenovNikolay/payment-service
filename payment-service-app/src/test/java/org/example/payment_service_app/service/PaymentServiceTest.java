@@ -1,6 +1,6 @@
 package org.example.payment_service_app.service;
 
-import org.example.payment_service_app.EntityExceptions.PaymentNotFoundException;
+import org.example.payment_service_app.exception.custom.PaymentNotFoundException;
 import org.example.payment_service_app.mapper.PaymentMapper;
 import org.example.payment_service_app.model.dto.PaymentDto;
 import org.example.payment_service_app.model.entity.Payment;

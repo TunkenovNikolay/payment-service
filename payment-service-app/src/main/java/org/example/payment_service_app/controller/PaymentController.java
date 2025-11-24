@@ -24,12 +24,7 @@ public class PaymentController {
 
     @GetMapping("/{id}")
     public ResponseEntity<PaymentDto> getPayment(@PathVariable Long id) {
-        try {
-            PaymentDto payment = paymentService.getPaymentById(id);
-            return ResponseEntity.ok(payment);
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok(paymentService.getPaymentById(id));
     }
 
     @GetMapping

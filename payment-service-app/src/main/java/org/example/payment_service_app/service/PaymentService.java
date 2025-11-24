@@ -1,6 +1,6 @@
 package org.example.payment_service_app.service;
 
-import org.example.payment_service_app.EntityExceptions.PaymentNotFoundException;
+import org.example.payment_service_app.exception.custom.PaymentNotFoundException;
 import org.example.payment_service_app.mapper.PaymentMapper;
 import org.example.payment_service_app.model.dto.PaymentDto;
 import org.example.payment_service_app.model.entity.Payment;
@@ -24,7 +24,7 @@ public class PaymentService {
 
     public PaymentDto getPaymentById(long id) {
         Payment payment = paymentRepository.getPaymentById(id)
-                .orElseThrow(() -> new PaymentNotFoundException("Payment not found with id: " + id));
+                .orElseThrow(() -> new PaymentNotFoundException(id));
         return paymentMapper.convertToDto(payment);
     }
 
