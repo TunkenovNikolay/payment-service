@@ -4,9 +4,7 @@ import org.example.payment_service_app.model.entity.Payment;
 import org.springframework.stereotype.Repository;
 
 import java.time.Instant;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Repository
 public class PaymentRepository {
@@ -19,8 +17,8 @@ public class PaymentRepository {
         payments.put(3L, new Payment(3L, 22.22, "Pay for Chips", Instant.parse("2009-09-15T10:00:00Z")));
     }
 
-    public Map<Long, Payment> getAllPayments() {
-        return payments;
+    public List<Payment> getAllPayments() {
+        return new ArrayList<>(payments.values());
     }
 
     public Optional<Payment> getPaymentById(long id) {

@@ -5,7 +5,6 @@ import org.example.payment_service_app.model.entity.Payment;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -23,12 +22,12 @@ public class PaymentMapper {
         return dto;
     }
 
-    public static List<PaymentDto> convertToDtoList(Map<Long, Payment> payments) {
+    public static List<PaymentDto> convertToDtoList(List<Payment> payments) {
         if (payments == null || payments.isEmpty()) {
             return List.of();
         }
 
-        return payments.values().stream()
+        return payments.stream()
                 .map(PaymentMapper::convertToDto)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
