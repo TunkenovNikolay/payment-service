@@ -32,7 +32,7 @@ public class PaymentController {
         }
     }
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<List<PaymentDto>> getPayments() {
         return ResponseEntity.ok(paymentAdapter.getAllPayments());
     }

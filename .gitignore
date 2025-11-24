@@ -36,3 +36,8 @@ build/
 
 ### Mac OS ###
 .DS_Store
+/payment-service-app/.gitattributes
+/payment-service-app/.gitignore
+/payment-service-app/.mvn/wrapper/maven-wrapper.properties
+/payment-service-app/mvnw
+/payment-service-app/mvnw.cmd
