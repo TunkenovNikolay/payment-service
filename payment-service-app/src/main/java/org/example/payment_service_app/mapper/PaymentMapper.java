@@ -6,21 +6,21 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Component
 public class PaymentMapper {
 
-    public Optional<PaymentDto> convertToDto(Payment payment) {
-        return Optional.ofNullable(payment)
-                .map(p -> {
-                    PaymentDto dto = new PaymentDto();
-                    dto.setId(p.getId());
-                    dto.setValue(p.getValue());
-                    dto.setName(p.getName());
-                    return dto;
-                });
+    public PaymentDto convertToDto(Payment payment) {
+        if (payment == null) {
+            return null;
+        }
+        PaymentDto dto = new PaymentDto();
+        dto.setId(payment.getId());
+        dto.setValue(payment.getValue());
+        dto.setName(payment.getName());
+        return dto;
     }
 
     public List<PaymentDto> convertToDtoList(Map<Long, Payment> payments) {
@@ -30,8 +30,7 @@ public class PaymentMapper {
 
         return payments.values().stream()
                 .map(this::convertToDto)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
+                .filter(Objects::nonNull)  // Фильтруем null значения
                 .collect(Collectors.toList());
     }
 }

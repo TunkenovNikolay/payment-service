@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Repository
 public class PaymentRepository {
@@ -22,7 +23,7 @@ public class PaymentRepository {
         return payments;
     }
 
-    public Payment getPaymentById(long id) {
-        return payments.get(id);
+    public Optional<Payment> getPaymentById(long id) {
+        return Optional.ofNullable(payments.get(id));
     }
 }
