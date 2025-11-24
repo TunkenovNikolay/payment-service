@@ -12,21 +12,19 @@ import java.util.Optional;
 @Service
 public class PaymentService {
     private final PaymentRepository paymentRepository;
-    private final PaymentMapper paymentMapper;
 
     @Autowired
-    public PaymentService(final PaymentRepository paymentRepository, final PaymentMapper paymentMapper) {
+    public PaymentService(final PaymentRepository paymentRepository) {
         this.paymentRepository = paymentRepository;
-        this.paymentMapper = paymentMapper;
     }
 
 
     public Optional<PaymentDto> getPaymentDtoById(long id) {
         return paymentRepository.getPaymentById(id)
-                .map(paymentMapper::convertToDto);
+                .map(PaymentMapper::convertToDto);
     }
 
     public List<PaymentDto> getAllPaymentsDto() {
-        return paymentMapper.convertToDtoList(paymentRepository.getAllPayments());
+        return PaymentMapper.convertToDtoList(paymentRepository.getAllPayments());
     }
 }

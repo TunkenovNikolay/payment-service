@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 @Component
 public class PaymentMapper {
 
-    public PaymentDto convertToDto(Payment payment) {
+    public static PaymentDto convertToDto(Payment payment) {
         if (payment == null) {
             return null;
         }
@@ -23,14 +23,14 @@ public class PaymentMapper {
         return dto;
     }
 
-    public List<PaymentDto> convertToDtoList(Map<Long, Payment> payments) {
+    public static List<PaymentDto> convertToDtoList(Map<Long, Payment> payments) {
         if (payments == null || payments.isEmpty()) {
             return List.of();
         }
 
         return payments.values().stream()
-                .map(this::convertToDto)
-                .filter(Objects::nonNull)  // Фильтруем null значения
+                .map(PaymentMapper::convertToDto)
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
 }
