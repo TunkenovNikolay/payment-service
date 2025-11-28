@@ -23,13 +23,13 @@ public class PaymentService {
 
 
     public PaymentDto getPaymentById(long id) {
-        Payment payment = paymentRepository.getPaymentById(id)
-                .orElseThrow(() -> new PaymentNotFoundException(id));
+        final Payment payment = paymentRepository.getPaymentById(id)
+            .orElseThrow(() -> new PaymentNotFoundException(id));
         return paymentMapper.convertToDto(payment);
     }
 
     public List<PaymentDto> getAllPayments() {
-        List<Payment> payments = paymentRepository.getAllPayments();
+        final List<Payment> payments = paymentRepository.getAllPayments();
         return paymentMapper.convertToDtoList(payments);
     }
 }
