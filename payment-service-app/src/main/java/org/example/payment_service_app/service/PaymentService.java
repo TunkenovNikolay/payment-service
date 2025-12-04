@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class PaymentService {
@@ -22,14 +23,14 @@ public class PaymentService {
     }
 
 
-    public PaymentDto getPaymentById(long id) {
-        final Payment payment = paymentRepository.getPaymentById(id)
+    public PaymentDto getPaymentByUuid(UUID id) {
+        final Payment payment = paymentRepository.findById(id)
             .orElseThrow(() -> new PaymentNotFoundException(id));
         return paymentMapper.convertToDto(payment);
     }
 
     public List<PaymentDto> getAllPayments() {
-        final List<Payment> payments = paymentRepository.getAllPayments();
+        final List<Payment> payments = paymentRepository.findAll();
         return paymentMapper.convertToDtoList(payments);
     }
 }

@@ -2,9 +2,12 @@ package org.example.payment_service_app.model.dto;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
+import java.util.UUID;
+
 @Data
 public class PaymentDto {
-    Long id;
-    Double value;
-    String name;
+    UUID guid;
+    BigDecimal amount;
+    String currency;
 }
