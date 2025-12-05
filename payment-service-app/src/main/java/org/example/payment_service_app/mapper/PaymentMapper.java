@@ -16,9 +16,9 @@ public class PaymentMapper {
             return null;
         }
         final PaymentDto dto = new PaymentDto();
-        dto.setId(payment.getId());
-        dto.setValue(payment.getValue());
-        dto.setName(payment.getName());
+        dto.setGuid(payment.getGuid());
+        dto.setAmount(payment.getAmount());
+        dto.setCurrency(payment.getNote());
         return dto;
     }
 
