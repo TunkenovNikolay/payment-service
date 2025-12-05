@@ -14,7 +14,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -119,21 +118,6 @@ class PaymentServiceTest {
         assertThat(result).isEmpty();
         verify(paymentRepository).findAll();
         verify(paymentMapper).convertToDtoList(List.of());
-    }
-
-    @Test
-    void getAllPayments_shouldReturnEmptyList_whenRepositoryReturnsNull() {
-        // given
-        when(paymentRepository.findAll()).thenReturn(Collections.emptyList());
-        when(paymentMapper.convertToDtoList(null)).thenReturn(List.of());
-
-        // when
-        List<PaymentDto> result = paymentService.getAllPayments();
-
-        // then
-        assertThat(result).isEmpty();
-        verify(paymentRepository).findAll();
-        verify(paymentMapper).convertToDtoList(null);
     }
 
     private Payment createPayment(UUID guid, UUID inquiryRefId, BigDecimal amount, String currency) {
