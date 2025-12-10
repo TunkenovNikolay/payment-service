@@ -45,11 +45,11 @@ public class PaymentController {
         @RequestParam(defaultValue = "createdAt") String sortedBy,
         @RequestParam(defaultValue = "desc") String direction
     ) {
-        Sort sort = direction.equalsIgnoreCase("desc")
+        final Sort sort = direction.equalsIgnoreCase("desc")
             ? Sort.by(sortedBy).descending()
             : Sort.by(sortedBy).ascending();
 
-        Pageable pageable = PageRequest.of(page, size, sort);
+        final Pageable pageable = PageRequest.of(page, size, sort);
         return paymentService.searchPaged(filter, pageable);
     }
 

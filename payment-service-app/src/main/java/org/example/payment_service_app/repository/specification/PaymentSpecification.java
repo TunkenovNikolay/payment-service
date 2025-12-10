@@ -29,8 +29,7 @@ public class PaymentSpecification {
             cb.lessThan(root.get("amount"), max);
     }
 
-    public static Specification<Payment> amountBetween(BigDecimal min,
-                                                       BigDecimal max) {
+    public static Specification<Payment> amountBetween(BigDecimal min, BigDecimal max) {
         return (root, query, cb) ->
             cb.between(root.get("amount"), min, max);
     }
@@ -45,8 +44,7 @@ public class PaymentSpecification {
             cb.greaterThan(root.get("createdAt"), after);
     }
 
-    public static Specification<Payment> createdBetween(Instant after,
-                                                        Instant before) {
+    public static Specification<Payment> createdBetween(Instant after, Instant before) {
         return (root, query, cb) ->
             cb.between(root.get("createdAt"), after, before);
     }

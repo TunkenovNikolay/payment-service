@@ -40,13 +40,13 @@ public class PaymentService {
 
     public Page<Payment> searchPaged(PaymentFilterDto filter, Pageable
         pageable) {
-        Specification<Payment> spec =
+        final Specification<Payment> spec =
             PaymentFilterFactory.filter(filter);
         return paymentRepository.findAll(spec, pageable);
     }
 
     public Page<PaymentDto> searchPaged2(PaymentFilterDto filter, Pageable pageable) {
-        Specification<Payment> spec = PaymentFilterFactory.filter(filter);
+        final Specification<Payment> spec = PaymentFilterFactory.filter(filter);
         return paymentMapper.convertToDtoPage(paymentRepository.findAll(spec, pageable));
     }
 }
