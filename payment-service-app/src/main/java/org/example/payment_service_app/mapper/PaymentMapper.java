@@ -2,6 +2,7 @@ package org.example.payment_service_app.mapper;
 
 import org.example.payment_service_app.model.dto.PaymentDto;
 import org.example.payment_service_app.model.entity.Payment;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -31,5 +32,9 @@ public class PaymentMapper {
                 .map(this::convertToDto)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
+    }
+
+    public Page<PaymentDto> convertToDtoPage(Page<Payment> payments) {
+        return payments == null ? Page.empty() : payments.map(this::convertToDto);
     }
 }
