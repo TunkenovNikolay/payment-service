@@ -9,7 +9,6 @@ import java.time.Instant;
 
 @Getter
 @Setter
-
 public class PaymentFilterDto {
 
     private PaymentStatus status;
