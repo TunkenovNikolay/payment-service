@@ -3,9 +3,14 @@ package org.example.payment_service_app.service;
 import org.example.payment_service_app.exception.custom.PaymentNotFoundException;
 import org.example.payment_service_app.mapper.PaymentMapper;
 import org.example.payment_service_app.model.dto.PaymentDto;
+import org.example.payment_service_app.model.dto.PaymentFilterDto;
 import org.example.payment_service_app.model.entity.Payment;
 import org.example.payment_service_app.repository.PaymentRepository;
+import org.example.payment_service_app.repository.specification.PaymentFilterFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,7 +27,6 @@ public class PaymentService {
         this.paymentMapper = paymentMapper;
     }
 
-
     public PaymentDto getPaymentByUuid(UUID id) {
         final Payment payment = paymentRepository.findById(id)
             .orElseThrow(() -> new PaymentNotFoundException(id));
@@ -32,5 +36,17 @@ public class PaymentService {
     public List<PaymentDto> getAllPayments() {
         final List<Payment> payments = paymentRepository.findAll();
         return paymentMapper.convertToDtoList(payments);
+    }
+
+    public Page<Payment> searchPaged(PaymentFilterDto filter, Pageable
+        pageable) {
+        final Specification<Payment> spec =
+            PaymentFilterFactory.filter(filter);
+        return paymentRepository.findAll(spec, pageable);
+    }
+
+    public Page<PaymentDto> searchPaged2(PaymentFilterDto filter, Pageable pageable) {
+        final Specification<Payment> spec = PaymentFilterFactory.filter(filter);
+        return paymentMapper.convertToDtoPage(paymentRepository.findAll(spec, pageable));
     }
 }
