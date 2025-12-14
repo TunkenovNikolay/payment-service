@@ -1,9 +1,11 @@
 databaseChangeLog:
   - changeSet:
-      id: 1.1-insert-demo-payment
-      author: Nikolay
-      comment: "Insert demo payment row for development/testing"
+      id: 002-insert-test-payment
+      author: Nikolay Tunkenov
+      comment: "some comment"
       changes:
+        - tagDatabase:
+            tag: v1.1
         - insert:
             tableName: payment
             columns:

@@ -1,0 +1,18 @@
+INSERT INTO payment (guid,
+                     inquiry_ref_id,
+                     transaction_ref_id,
+                     amount,
+                     currency,
+                     status,
+                     note,
+                     created_at,
+                     updated_at)
+VALUES (gen_random_uuid(),
+        gen_random_uuid(),
+        gen_random_uuid(),
+        10.00,
+        'USD',
+        'RECEIVED',
+        'Test payment 4 - sql file generated',
+        current_timestamp,
+        current_timestamp);

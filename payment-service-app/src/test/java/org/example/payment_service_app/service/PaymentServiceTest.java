@@ -33,7 +33,7 @@ class PaymentServiceTest {
     private PaymentMapper paymentMapper;
 
     @InjectMocks
-    private PaymentService paymentService;
+    private PaymentServiceImpl paymentServiceImpl;
 
     @Test
     void getPaymentById_shouldReturnPaymentDto_whenPaymentExists() {
@@ -47,15 +47,15 @@ class PaymentServiceTest {
         PaymentDto expectedDto = createPaymentDto(paymentGuid, currency, amount);
 
         when(paymentRepository.findById(paymentGuid)).thenReturn(Optional.of(payment));
-        when(paymentMapper.convertToDto(payment)).thenReturn(expectedDto);
+        when(paymentMapper.toDto(payment)).thenReturn(expectedDto);
 
         // when
-        PaymentDto result = paymentService.getPaymentByUuid(paymentGuid);
+        PaymentDto result = paymentServiceImpl.getPaymentByUuid(paymentGuid);
 
         // then
         assertThat(result).isEqualTo(expectedDto);
         verify(paymentRepository).findById(paymentGuid);
-        verify(paymentMapper).convertToDto(payment);
+        verify(paymentMapper).toDto(payment);
     }
 
     @Test
@@ -65,7 +65,7 @@ class PaymentServiceTest {
         when(paymentRepository.findById(uuid)).thenReturn(Optional.empty());
 
         // when & then
-        assertThatThrownBy(() -> paymentService.getPaymentByUuid(uuid))
+        assertThatThrownBy(() -> paymentServiceImpl.getPaymentByUuid(uuid))
             .isInstanceOf(PaymentNotFoundException.class)
             .hasMessage("Payment not found with id: " + uuid);
 
@@ -94,30 +94,30 @@ class PaymentServiceTest {
         List<PaymentDto> expectedDto = List.of(dto1, dto2);
 
         when(paymentRepository.findAll()).thenReturn(payments);
-        when(paymentMapper.convertToDtoList(payments)).thenReturn(expectedDto);
+        when(paymentMapper.toDto(payments)).thenReturn(expectedDto);
 
         // when
-        List<PaymentDto> result = paymentService.getAllPayments();
+        List<PaymentDto> result = paymentServiceImpl.getAllPayments();
 
         // then
         assertThat(result).hasSize(2).containsExactly(dto1, dto2);
         verify(paymentRepository).findAll();
-        verify(paymentMapper).convertToDtoList(payments);
+        verify(paymentMapper).toDto(payments);
     }
 
     @Test
     void getAllPayments_shouldReturnEmptyList_whenNoPayments() {
         // given
         when(paymentRepository.findAll()).thenReturn(List.of());
-        when(paymentMapper.convertToDtoList(List.of())).thenReturn(List.of());
+        when(paymentMapper.toDto(List.of())).thenReturn(List.of());
 
         // when
-        List<PaymentDto> result = paymentService.getAllPayments();
+        List<PaymentDto> result = paymentServiceImpl.getAllPayments();
 
         // then
         assertThat(result).isEmpty();
         verify(paymentRepository).findAll();
-        verify(paymentMapper).convertToDtoList(List.of());
+        verify(paymentMapper).toDto(List.of());
     }
 
     private Payment createPayment(UUID guid, UUID inquiryRefId, BigDecimal amount, String currency) {
@@ -135,8 +135,11 @@ class PaymentServiceTest {
     private PaymentDto createPaymentDto(UUID guid, String currency, BigDecimal amount) {
         PaymentDto dto = new PaymentDto();
         dto.setGuid(guid);
-        dto.setCurrency(currency);
         dto.setAmount(amount);
+        dto.setCurrency(currency);
+        dto.setStatus(PaymentStatus.PENDING); // или другой начальный статус
+        dto.setCreatedAt(OffsetDateTime.now());
+        dto.setUpdatedAt(OffsetDateTime.now());
         return dto;
     }
 }

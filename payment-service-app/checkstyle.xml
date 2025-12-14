@@ -6,6 +6,11 @@
     <!-- Устанавливаем кодировку файлов -->
     <property name="charset" value="UTF-8"/>
 
+    <!-- Исключаем файлы в target директории -->
+    <module name="BeforeExecutionExclusionFileFilter">
+        <property name="fileNamePattern" value=".*[\\/]target[\\/].*$"/>
+    </module>
+
     <!-- Проверка длины строки -->
     <module name="LineLength">
         <property name="max" value="120"/> <!-- Максимальная длина строки -->

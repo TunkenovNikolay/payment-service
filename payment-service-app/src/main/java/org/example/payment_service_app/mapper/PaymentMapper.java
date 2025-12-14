@@ -1,40 +1,36 @@
 package org.example.payment_service_app.mapper;
 
 import org.example.payment_service_app.model.dto.PaymentDto;
+import org.example.payment_service_app.model.dto.PaymentFilterDto;
 import org.example.payment_service_app.model.entity.Payment;
-import org.springframework.data.domain.Page;
-import org.springframework.stereotype.Component;
+import org.mapstruct.DecoratedWith;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.ReportingPolicy;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
-@Component
-public class PaymentMapper {
+@Mapper(componentModel = "spring",
+    unmappedSourcePolicy = ReportingPolicy.IGNORE,
+    unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@DecoratedWith(PaymentMapperDecorator.class)
+public interface PaymentMapper {
+    String CURRENCY_USD = "USD";
 
-    public PaymentDto convertToDto(Payment payment) {
-        if (payment == null) {
-            return null;
-        }
-        final PaymentDto dto = new PaymentDto();
-        dto.setGuid(payment.getGuid());
-        dto.setAmount(payment.getAmount());
-        dto.setCurrency(payment.getNote());
-        return dto;
-    }
+    @Mapping(target = "amount", source = "amount")
+    @Mapping(target = "currency", ignore = true)
+    @Mapping(target = "note", defaultValue = "some note")
+    PaymentDto toDto(Payment payment);
 
-    public List<PaymentDto> convertToDtoList(List<Payment> payments) {
-        if (payments == null || payments.isEmpty()) {
-            return List.of();
-        }
+    @Mapping(target = "currency", constant = CURRENCY_USD)
+    Payment toEntity(PaymentDto dto);
 
-        return payments.stream()
-                .map(this::convertToDto)
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
-    }
+    @Mapping(target = "currency", source = "filterDto.currency")
+    @Mapping(target = "status", source = "dto.status")
+    Payment toEntity(PaymentDto dto, PaymentFilterDto filterDto);
 
-    public Page<PaymentDto> convertToDtoPage(Page<Payment> payments) {
-        return payments == null ? Page.empty() : payments.map(this::convertToDto);
-    }
+    List<PaymentDto> toDto(List<Payment> payments);
+
+    List<Payment> toEntity(List<PaymentDto> dto);
+
 }

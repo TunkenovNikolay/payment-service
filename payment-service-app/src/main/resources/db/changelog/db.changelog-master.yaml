@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
       id: tag-0.0
-      author: Nikolay
+      author: Nikolay Tunkenov
       context: init
       comment: "Tag for empty database"
       changes:
@@ -19,11 +19,18 @@ databaseChangeLog:
             tag: v1.0
 
   - include:
-      file: v1_1/db.changelog-1.1-add-demo-payment.yaml
+      file: v1_1/db.changelog-1.1-add-test-payment.yaml
       relativeToChangelogFile: true
+  - include:
+      file: v1_2/db.changelog-1.2-add-test-payments-sql.yml
+      relativeToChangelogFile: true
+  - include:
+      file: v1_3/db.changelog-1.3-add-test-payments-sql-file.yml
+      relativeToChangelogFile: true
+
   - changeSet:
       id: tag-1.1
-      author: Nikolay
+      author: Nikolay Tunkenov
       changes:
         - tagDatabase:
             tag: v1.1

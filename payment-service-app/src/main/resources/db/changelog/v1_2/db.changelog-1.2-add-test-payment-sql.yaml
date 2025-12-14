@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1.2-insert-test-payment-sql
+      author: Nikolay Tunkenov
+      comment: "Insert 3 test payments for manual testing"
+      changes:
+        - sql:
+            sql: |
+              INSERT INTO payment (guid, inquiry_ref_id, transaction_ref_id, amount, currency, status, note, created_at, updated_at)
+              VALUES (gen_random_uuid(), gen_random_uuid(), gen_random_uuid(), 10.00, 'EUR', 'RECEIVED', 'Test payment 2 - sql', current_timestamp, current_timestamp);
+
+              INSERT INTO payment (guid, inquiry_ref_id, transaction_ref_id, amount, currency, status, note, created_at, updated_at)
+              VALUES (gen_random_uuid(), gen_random_uuid(), gen_random_uuid(), 20.50, 'EUR', 'PENDING', 'Test payment 3 - sql', current_timestamp, current_timestamp);
+      rollback:
+        - sql:
+            sql: |
+              DELETE FROM payment
+              WHERE note IN ('Test payment 2 - sql', 'Test payment 3 - sql');
