@@ -17,6 +17,9 @@
 
 	<properties>
 		<java.version>21</java.version>
+		<mapstruct.version>1.6.3</mapstruct.version>
+		<liquibase.version>4.32.0</liquibase.version>
+		<maven-checkstyle-plugin.version>3.6.0</maven-checkstyle-plugin.version>
 	</properties>
 
 	<dependencies>
@@ -56,7 +59,7 @@
 		<dependency>
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct-processor</artifactId>
-			<version>1.6.3</version>
+			<version>${mapstruct.version}</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -71,10 +74,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.14.0</version>
 				<configuration>
-					<source>${java.version}</source>
-					<target>${java.version}</target>
 					<annotationProcessorPaths>
 						<path>
 							<groupId>org.projectlombok</groupId>
@@ -105,7 +105,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
-				<version>3.5.0</version>
+				<version>3.6.0</version>
 				<executions>
 					<execution>
 						<phase>verify</phase>
@@ -116,7 +116,7 @@
 				</executions>
 				<configuration>
 					<configLocation>checkstyle.xml</configLocation>
-					<checkstyleVersion>10.17.0</checkstyleVersion>
+					<checkstyleVersion>${maven-checkstyle-plugin.version}</checkstyleVersion>
 					<inputEncoding>UTF-8</inputEncoding>
 					<consoleOutput>true</consoleOutput>
 					<failOnViolation>true</failOnViolation>
@@ -126,7 +126,7 @@
 			<plugin>
 				<groupId>org.liquibase</groupId>
 				<artifactId>liquibase-maven-plugin</artifactId>
-				<version>4.32.0</version>
+				<version>${liquibase.version}</version>
 				<configuration>
 					<propertyFile>src/main/resources/liquibase.properties</propertyFile>
 				</configuration>
