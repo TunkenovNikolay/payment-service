@@ -11,6 +11,10 @@ public class PaymentFilterFactory {
 
         Specification<Payment> spec = Specification.unrestricted();
 
+        if (filter == null) {
+            return spec;
+        }
+
         if (filter.getStatus() != null) {
             spec = spec.and(PaymentSpecification.hasStatus(filter.getStatus()));
         }
