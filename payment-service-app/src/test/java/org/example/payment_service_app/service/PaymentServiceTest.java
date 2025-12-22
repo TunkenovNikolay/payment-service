@@ -27,8 +27,10 @@ import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
+import static org.example.payment_service_app.util.TimeUtil.getNow;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -388,6 +390,140 @@ class PaymentServiceTest {
         assertEquals(status, result.getContent().getFirst().getStatus());
     }
 
+    @Test
+    void createPaymentTest() {
+        // Given
+        PaymentDto expected = createDtoFromPayment(paymentUsdReceived);
+        expected.setGuid(null);
+
+        Payment paymentToSave = createPaymentFromDto(expected);
+        paymentToSave.setGuid(UUID.randomUUID());
+        paymentToSave.setCreatedAt(getNow());
+        paymentToSave.setUpdatedAt(getNow());
+
+        Payment savedPayment = createPaymentFromDto(expected);
+        savedPayment.setGuid(paymentToSave.getGuid());
+        savedPayment.setCreatedAt(getNow());
+        savedPayment.setUpdatedAt(getNow());
+        savedPayment.setStatus(PaymentStatus.RECEIVED);
+
+        when(paymentMapper.toEntity(expected))
+            .thenReturn(paymentToSave);
+        when(paymentRepository.save(paymentToSave))
+            .thenReturn(savedPayment);
+        when(paymentMapper.toDto(savedPayment))
+            .thenReturn(createDtoFromPayment(savedPayment));
+
+        // When
+        PaymentDto actual = paymentService.createPayment(expected);
+
+        // Then
+        assertNotNull(actual);
+        assertNotNull(actual.getGuid());
+        assertEquals(expected.getAmount(), actual.getAmount());
+        assertEquals(expected.getCurrency(), actual.getCurrency());
+        assertEquals(PaymentStatus.RECEIVED, actual.getStatus());
+
+        verify(paymentRepository).save(paymentToSave);
+    }
+
+    @Test
+    void updatePaymentTest() {
+        // Given
+        UUID id = UUID.randomUUID();
+        PaymentDto requestDto = createDtoFromPayment(paymentUsdReceived);
+        requestDto.setGuid(null);
+
+        // Создаем Payment, который будет возвращен из маппера
+        Payment paymentFromMapper = createPaymentFromDto(requestDto);
+        paymentFromMapper.setGuid(id);
+
+        // Создаем сохраненный Payment
+        Payment savedPayment = createPaymentFromDto(requestDto);
+        savedPayment.setGuid(id);
+        savedPayment.setUpdatedAt(getNow());
+
+        // Мокаем вызовы
+        when(paymentRepository.existsById(id))
+            .thenReturn(true);
+        when(paymentMapper.toEntity(requestDto))
+            .thenReturn(paymentFromMapper);
+        when(paymentRepository.save(paymentFromMapper))
+            .thenReturn(savedPayment);
+        when(paymentMapper.toDto(savedPayment))
+            .thenReturn(createDtoFromPayment(savedPayment));
+
+        // When
+        PaymentDto actual = paymentService.updatePayment(id, requestDto);
+
+        // Then
+        assertNotNull(actual);
+        assertEquals(id, actual.getGuid());
+        assertEquals(requestDto.getAmount(), actual.getAmount());
+        assertEquals(requestDto.getCurrency(), actual.getCurrency());
+
+        // Проверяем правильные вызовы
+        verify(paymentRepository).existsById(id);
+        verify(paymentMapper).toEntity(requestDto);
+        verify(paymentRepository).save(paymentFromMapper);
+        verify(paymentMapper).toDto(savedPayment);
+    }
+
+    @Test
+    void deletePaymentTest() {
+        // Given
+        UUID paymentId = UUID.randomUUID();
+        Payment payment = paymentUsdReceived;
+        payment.setGuid(paymentId);
+
+        when(paymentRepository.existsById(paymentId)).thenReturn(true);
+
+        // When
+        paymentService.deletePayment(paymentId);
+
+        // Then
+        verify(paymentRepository).existsById(paymentId);
+        verify(paymentRepository).deleteById(paymentId);
+    }
+
+
+    @ParameterizedTest
+    @EnumSource(PaymentStatus.class)
+    void updateStatusTest(PaymentStatus status) {
+        // Given
+        UUID id = UUID.randomUUID();
+
+        Payment existingPayment = new Payment();
+        existingPayment.setGuid(id);
+        existingPayment.setStatus(PaymentStatus.PENDING); // начальный статус
+
+        Payment updatedPayment = new Payment();
+        updatedPayment.setGuid(id);
+        updatedPayment.setStatus(status);
+        updatedPayment.setUpdatedAt(getNow());
+
+        PaymentDto expectedDto = createDtoFromPayment(updatedPayment);
+
+        when(paymentRepository.findById(id))
+            .thenReturn(Optional.of(existingPayment));
+        when(paymentRepository.save(any(Payment.class)))
+            .thenReturn(updatedPayment);
+        when(paymentMapper.toDto(updatedPayment))
+            .thenReturn(expectedDto);
+
+        // When
+        PaymentDto actual = paymentService.updateStatus(id, status);
+
+        // Then
+        assertNotNull(actual);
+        assertEquals(id, actual.getGuid());
+        assertEquals(status, actual.getStatus());
+
+        verify(paymentRepository).findById(id);
+        verify(paymentRepository).save(any(Payment.class));
+        verify(paymentMapper).toDto(updatedPayment);
+    }
+
     // Вспомогательные методы
     private Payment createPayment(String currency, BigDecimal amount,
                                   PaymentStatus status, OffsetDateTime createdAt) {
@@ -415,6 +551,20 @@ class PaymentServiceTest {
             .note(payment.getNote())
             .createdAt(payment.getCreatedAt())
             .updatedAt(payment.getUpdatedAt())
+            .build();
+    }
+
+    private Payment createPaymentFromDto(PaymentDto paymentDto) {
+        return Payment.builder()
+            .guid(paymentDto.getGuid())
+            .inquiryRefId(paymentDto.getInquiryRefId())
+            .amount(paymentDto.getAmount())
+            .currency(paymentDto.getCurrency())
+            .transactionRefId(paymentDto.getTransactionRefId())
+            .status(paymentDto.getStatus())
+            .note(paymentDto.getNote())
+            .createdAt(paymentDto.getCreatedAt())
+            .updatedAt(paymentDto.getUpdatedAt())
             .build();
     }
 

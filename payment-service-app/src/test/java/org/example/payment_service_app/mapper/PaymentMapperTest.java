@@ -35,6 +35,7 @@ public class PaymentMapperTest {
         //when
         var actual = mapper.toDto(expected);
 
+        //then
         assertNotNull(actual);
         assertEquals(expected.getGuid(), actual.getGuid());
         assertEquals(expected.getAmount(), actual.getAmount());
@@ -65,6 +66,7 @@ public class PaymentMapperTest {
         //when
         var actual = mapper.toEntity(expected);
 
+        //then
         assertNotNull(actual);
         assertEquals(expected.getGuid(), actual.getGuid());
         assertEquals(expected.getAmount(), actual.getAmount());
