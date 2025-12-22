@@ -2,6 +2,7 @@ package org.example.payment_service_app.controller;
 
 import org.example.payment_service_app.model.dto.PaymentDto;
 import org.example.payment_service_app.model.dto.PaymentFilterDto;
+import org.example.payment_service_app.model.dto.PaymentStatusUpdateDto;
 import org.example.payment_service_app.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -33,6 +34,29 @@ public class PaymentController {
     @GetMapping
     public ResponseEntity<List<PaymentDto>> getPayments() {
         return ResponseEntity.ok(paymentService.getAllPayments());
+    }
+
+    @PostMapping
+    public ResponseEntity<PaymentDto> createPayment(@RequestBody PaymentDto paymentDto) {
+        return ResponseEntity.ok(paymentService.createPayment(paymentDto));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<PaymentDto> updatePayment(@PathVariable UUID id, @RequestBody PaymentDto paymentDto) {
+        return ResponseEntity.ok(paymentService.updatePayment(id, paymentDto));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletePayment(@PathVariable UUID id) {
+        paymentService.deletePayment(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<PaymentDto> updatePayment(
+        @PathVariable UUID id,
+        @RequestBody PaymentStatusUpdateDto paymentStatusUpdateDto) {
+        return ResponseEntity.ok(paymentService.updateStatus(id, paymentStatusUpdateDto.getStatus()));
     }
 
     @GetMapping("/search")

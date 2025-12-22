@@ -14,6 +14,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @RequiredArgsConstructor
 @EqualsAndHashCode
+@Builder
 public class Payment {
 
     @Id
