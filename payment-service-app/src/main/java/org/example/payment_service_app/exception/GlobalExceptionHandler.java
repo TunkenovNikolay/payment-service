@@ -11,14 +11,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(ServiceException.class)
     public ResponseEntity<ExceptionMessageModel> handleException(ServiceException ex) {
-        ExceptionMessageModel errorMessage = new ExceptionMessageModel(ex.getMessage());
+        final ExceptionMessageModel errorMessage = new ExceptionMessageModel(ex.getMessage());
         logger.error(ex.getMessage());
         return new ResponseEntity<>(errorMessage, ex.getStatus());
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ExceptionMessageModel> handleException(Exception ex) {
-        ExceptionMessageModel errorMessage = new ExceptionMessageModel(ex.getMessage());
+        final ExceptionMessageModel errorMessage = new ExceptionMessageModel(ex.getMessage());
         logger.error(ex.getMessage());
         logger.error(ex.getStackTrace());
         return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
