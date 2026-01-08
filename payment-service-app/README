@@ -139,7 +139,7 @@ PAYMENT_SERVICE_URL=http://localhost:8081/api/payments
 # ============================================
 # 1. Получение JWT токена для admin_user
 # ============================================
-curl -X POST "${KEYCLOAK_URL}/realms/iprody-lms/protocol/openid-connect/token" \
+curl -X POST "${KEYCLOAK_URL}/realms/pet-lms/protocol/openid-connect/token" \
   -H "Content-Type: application/x-www-form-urlencoded" \
   -d "grant_type=password" \
   -d "client_id=basic_client" \
@@ -153,7 +153,7 @@ curl -X POST "${KEYCLOAK_URL}/realms/iprody-lms/protocol/openid-connect/token" \
 # ============================================
 # 2. Получение JWT токена для reader_user
 # ============================================
-curl -X POST "${KEYCLOAK_URL}/realms/iprody-lms/protocol/openid-connect/token" \
+curl -X POST "${KEYCLOAK_URL}/realms/pet-lms/protocol/openid-connect/token" \
   -H "Content-Type: application/x-www-form-urlencoded" \
   -d "grant_type=password" \
   -d "client_id=basic_client" \
@@ -279,7 +279,7 @@ curl -X GET "${PAYMENT_SERVICE_URL}/search" \
 # ============================================
 
 # Получение токена и сохранение в переменную
-# ADMIN_TOKEN=$(curl -s -X POST "${KEYCLOAK_URL}/realms/iprody-lms/protocol/openid-connect/token" \
+# ADMIN_TOKEN=$(curl -s -X POST "${KEYCLOAK_URL}/realms/pet-lms/protocol/openid-connect/token" \
 #   -H "Content-Type: application/x-www-form-urlencoded" \
 #   -d "grant_type=password" \
 #   -d "client_id=basic_client" \
