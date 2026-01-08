@@ -1,0 +1,63 @@
+{
+  "realm": "pet-lms",
+  "enabled": true,
+  "clients": [
+    {
+      "clientId": "basic_client",
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "secret": "myclient-secret",
+      "redirectUris": [
+        "http://localhost:8085/*"
+      ],
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": true
+    }
+  ],
+  "users": [
+    {
+      "username": "testuser",
+      "enabled": true,
+      "email": "testuser@example.local",
+      "firstName": "Test",
+      "lastName": "User",
+      "createdTimestamp": 1723468800000,
+      "emailVerified": true,
+      "credentials": [
+        { "type": "password", "value": "testpassword", "temporary": false }
+      ],
+      "realmRoles": ["USER", "READER"],
+      "requiredActions": []
+    },
+    {
+      "username": "testuser2",
+      "enabled": true,
+      "email": "testuser1@example.local",
+      "firstName": "Test",
+      "lastName": "Admin",
+      "createdTimestamp": 1723468800000,
+      "emailVerified": true,
+      "credentials": [
+        { "type": "password", "value": "testpassword", "temporary": false }
+      ],
+      "realmRoles": ["ADMIN"],
+      "requiredActions": []
+    }
+  ],
+  "roles": {
+    "realm": [
+      {
+        "name": "USER",
+        "description": "Basic user role"
+      },
+      {
+        "name": "READER",
+        "description": "Reader user role"
+      },
+      {
+        "name": "ADMIN",
+        "description": "Admin user role"
+      }
+    ]
+  }
+}

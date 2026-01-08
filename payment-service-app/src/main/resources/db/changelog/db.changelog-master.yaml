@@ -22,10 +22,10 @@ databaseChangeLog:
       file: v1_1/db.changelog-1.1-add-test-payment.yaml
       relativeToChangelogFile: true
   - include:
-      file: v1_2/db.changelog-1.2-add-test-payments-sql.yml
+      file: v1_2/db.changelog-1.2-add-test-payment-sql.yaml
       relativeToChangelogFile: true
   - include:
-      file: v1_3/db.changelog-1.3-add-test-payments-sql-file.yml
+      file: v1_3/db.changelog-1.3-add-test-payment-sql-file.yaml
       relativeToChangelogFile: true
 
   - changeSet:

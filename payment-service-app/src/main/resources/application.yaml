@@ -6,7 +6,7 @@ spring:
     name: payment-service-app
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/payment-db
+    url: jdbc:postgresql://postgres:5432/payment-db
     username: admin
     password: secret
 
@@ -23,6 +23,12 @@ spring:
     enabled: true
     change-log: classpath:db/changelog/db.changelog-master.yaml
 
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8085/realms/pet-lms
+
 logging:
   level:
     root: INFO
@@ -30,3 +36,7 @@ logging:
     liquibase: TRACE
     org.liquibase: TRACE
     org.springframework.jdbc.core: DEBUG
+    org.springframework.security: TRACE
+    org.springframework.security.oauth2: TRACE
+    org.springframework.web: DEBUG
+    org.springframework.boot.autoconfigure: DEBUG

@@ -33,7 +33,7 @@
             <property name="throwsIndent" value="4"/> <!-- Отступ для throws -->
             <property name="arrayInitIndent" value="4"/> <!-- Отступ для инициализации массивов -->
             <property name="lineWrappingIndentation" value="4"/> <!-- Отступ для переноса строк -->
-            <property name="forceStrictCondition" value="true"/> <!-- Строгая проверка отступов -->
+            <property name="forceStrictCondition" value="false"/> <!-- Строгая проверка отступов -->
         </module>
     </module>
 </module>

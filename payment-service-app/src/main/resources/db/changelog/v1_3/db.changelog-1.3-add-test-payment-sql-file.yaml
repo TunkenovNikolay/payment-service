@@ -4,7 +4,7 @@ databaseChangeLog:
       author: Nikolay Tunkenov
       changes:
         - sqlFile:
-            path: db.changelog/sql/data.sql
+            path: db/changelog/sql/data.sql
             relativeToChangelogFile: false
       rollback:
         - delete:
