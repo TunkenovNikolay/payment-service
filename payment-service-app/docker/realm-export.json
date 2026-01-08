@@ -16,31 +16,39 @@
   ],
   "users": [
     {
-      "username": "testuser",
+      "username": "admin_user",
       "enabled": true,
-      "email": "testuser@example.local",
-      "firstName": "Test",
+      "email": "admin@example.local",
+      "firstName": "Admin",
       "lastName": "User",
       "createdTimestamp": 1723468800000,
       "emailVerified": true,
       "credentials": [
-        { "type": "password", "value": "testpassword", "temporary": false }
+        {
+          "type": "password",
+          "value": "adminpassword",
+          "temporary": false
+        }
       ],
-      "realmRoles": ["USER", "READER"],
+      "realmRoles": ["admin"],
       "requiredActions": []
     },
     {
-      "username": "testuser2",
+      "username": "reader_user",
       "enabled": true,
-      "email": "testuser1@example.local",
-      "firstName": "Test",
-      "lastName": "Admin",
+      "email": "reader@example.local",
+      "firstName": "Reader",
+      "lastName": "User",
       "createdTimestamp": 1723468800000,
       "emailVerified": true,
       "credentials": [
-        { "type": "password", "value": "testpassword", "temporary": false }
+        {
+          "type": "password",
+          "value": "readerpassword",
+          "temporary": false
+        }
       ],
-      "realmRoles": ["ADMIN"],
+      "realmRoles": ["reader"],
       "requiredActions": []
     }
   ],
