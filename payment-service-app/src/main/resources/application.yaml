@@ -29,14 +29,22 @@ spring:
         jwt:
           issuer-uri: http://localhost:8085/realms/pet-lms
 
+# Actuator конфигурация
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,liquibase,beans,metrics,env,loggers
+
 logging:
   level:
-    root: INFO
-    org.springframework.boot.autoconfigure.liquibase: TRACE
-    liquibase: TRACE
-    org.liquibase: TRACE
+    root: DEBUG
+    org.springframework.boot.autoconfigure.liquibase: INFO
+    liquibase: INFO
+    org.liquibase: INFO
     org.springframework.jdbc.core: DEBUG
-    org.springframework.security: TRACE
-    org.springframework.security.oauth2: TRACE
-    org.springframework.web: DEBUG
+    org.springframework.security: INFO
+    org.springframework.security.oauth2: INFO
+    org.springframework.web: INFO
+    org.springframework.data: INFO
     org.springframework.boot.autoconfigure: DEBUG
