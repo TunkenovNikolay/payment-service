@@ -1,6 +1,9 @@
 package org.example.payment_service_app.service;
 
+import org.example.payment_service_app.async.AsyncSender;
+import org.example.payment_service_app.async.XPaymentAdapterRequestMessage;
 import org.example.payment_service_app.mapper.PaymentMapper;
+import org.example.payment_service_app.mapper.XPaymentAdapterMapper;
 import org.example.payment_service_app.model.dto.PaymentDto;
 import org.example.payment_service_app.model.dto.PaymentFilterDto;
 import org.example.payment_service_app.model.entity.Payment;
@@ -43,6 +46,12 @@ class PaymentServiceTest {
 
     @Mock
     private PaymentMapper paymentMapper;
+
+    @Mock
+    private XPaymentAdapterMapper xPaymentAdapterMapper;
+
+    @Mock
+    private AsyncSender<XPaymentAdapterRequestMessage> sender;
 
     @InjectMocks
     private PaymentServiceImpl paymentService;
@@ -413,6 +422,8 @@ class PaymentServiceTest {
             .thenReturn(savedPayment);
         when(paymentMapper.toDto(savedPayment))
             .thenReturn(createDtoFromPayment(savedPayment));
+        when(xPaymentAdapterMapper.toXPaymentAdapterRequestMessage(any(Payment.class)))
+            .thenReturn(new XPaymentAdapterRequestMessage());
 
         // When
         PaymentDto actual = paymentService.createPayment(expected);
@@ -425,6 +436,8 @@ class PaymentServiceTest {
         assertEquals(PaymentStatus.RECEIVED, actual.getStatus());
 
         verify(paymentRepository).save(paymentToSave);
+        verify(sender).send(any(XPaymentAdapterRequestMessage.class));
+        verify(xPaymentAdapterMapper).toXPaymentAdapterRequestMessage(any(Payment.class));
     }
 
     @Test
