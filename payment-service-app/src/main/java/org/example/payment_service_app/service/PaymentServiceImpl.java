@@ -1,6 +1,7 @@
 package org.example.payment_service_app.service;
 
-import org.example.payment_service_app.exception.custom.PaymentNotFoundException;
+import org.example.payment_service_app.exception.ErrorMessage;
+import org.example.payment_service_app.exception.ServiceException;
 import org.example.payment_service_app.mapper.PaymentMapper;
 import org.example.payment_service_app.model.dto.PaymentDto;
 import org.example.payment_service_app.model.dto.PaymentFilterDto;
@@ -33,7 +34,7 @@ public class PaymentServiceImpl implements PaymentService {
     public PaymentDto getPaymentByUuid(UUID id) {
         return paymentRepository.findById(id)
             .map(paymentMapper::toDto)
-            .orElseThrow(() -> new PaymentNotFoundException(id));
+            .orElseThrow(() -> new ServiceException(ErrorMessage.PAYMENT_NOT_EXIST, id));
     }
 
     public List<PaymentDto> getAllPayments() {
@@ -49,7 +50,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     public PaymentDto updatePayment(UUID id, PaymentDto paymentDto) {
         if (!paymentRepository.existsById(id)) {
-            throw new PaymentNotFoundException(id);
+            throw new ServiceException(ErrorMessage.PAYMENT_NOT_EXIST, id);
         }
         final Payment payment = paymentMapper.toEntity(paymentDto);
         payment.setGuid(id);
@@ -59,7 +60,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     public void deletePayment(UUID id) {
         if (!paymentRepository.existsById(id)) {
-            throw new PaymentNotFoundException(id);
+            throw new ServiceException(ErrorMessage.PAYMENT_NOT_EXIST, id);
         }
         paymentRepository.deleteById(id);
     }
@@ -67,7 +68,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public PaymentDto updateStatus(UUID id, PaymentStatus paymentStatus) {
         final Payment payment = paymentRepository.findById(id)
-            .orElseThrow(() -> new PaymentNotFoundException(id));
+            .orElseThrow(() -> new ServiceException(ErrorMessage.PAYMENT_NOT_EXIST, id));
 
         payment.setStatus(paymentStatus);
         payment.setUpdatedAt(getNow());
