@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,44 +24,50 @@ public class PaymentController {
     @Autowired
     public PaymentController(PaymentService paymentService) {
         this.paymentService = paymentService;
-
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<PaymentDto> getPaymentByUuid(@PathVariable UUID id) {
         return ResponseEntity.ok(paymentService.getPaymentByUuid(id));
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('USER', 'READER')")
     public ResponseEntity<List<PaymentDto>> getPayments() {
         return ResponseEntity.ok(paymentService.getAllPayments());
     }
 
     @PostMapping
-    public ResponseEntity<PaymentDto> createPayment(@RequestBody PaymentDto paymentDto) {
+    @PreAuthorize("hasAnyRole( 'ADMIN')")
+    public ResponseEntity<PaymentDto> create(@RequestBody PaymentDto paymentDto) {
         return ResponseEntity.ok(paymentService.createPayment(paymentDto));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PaymentDto> updatePayment(@PathVariable UUID id, @RequestBody PaymentDto paymentDto) {
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<PaymentDto> update(@PathVariable UUID id, @RequestBody PaymentDto paymentDto) {
         return ResponseEntity.ok(paymentService.updatePayment(id, paymentDto));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePayment(@PathVariable UUID id) {
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> delete(@PathVariable UUID id) {
         paymentService.deletePayment(id);
         return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/{id}/status")
-    public ResponseEntity<PaymentDto> updatePayment(
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<PaymentDto> update(
         @PathVariable UUID id,
         @RequestBody PaymentStatusUpdateDto paymentStatusUpdateDto) {
         return ResponseEntity.ok(paymentService.updateStatus(id, paymentStatusUpdateDto.getStatus()));
     }
 
     @GetMapping("/search")
-    public ResponseEntity<Page<PaymentDto>> searchPayments(
+    @PreAuthorize("hasAnyRole('USER', 'READER', 'ADMIN')")
+    public ResponseEntity<Page<PaymentDto>> search(
         @ModelAttribute PaymentFilterDto filter,
         @PageableDefault(size = 25, sort = "createdAt", direction = Sort.Direction.ASC)
         Pageable pageable) {
