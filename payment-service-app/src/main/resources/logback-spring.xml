@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <property name="LOG_PATTERN"
-              value="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %pid --- [%thread] %-40.40logger{50} : %msg%n"/>
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level --- [%thread] %-40.40logger{50} : %msg%n"/>
 
     <!-- STDOUT (консольный аппендер) -->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
@@ -38,7 +38,7 @@
     </appender>
 
     <!-- Корневой логгер (root) -->
-    <root level="${LOG_LEVEL:-INFO}">
+    <root level="${LOG_LEVEL:-WARN}">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="FILE"/>
     </root>
