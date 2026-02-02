@@ -24,7 +24,7 @@ public class MessageHandlerImpl implements MessageHandler<XPaymentAdapterRequest
     @Override
     public void handle(XPaymentAdapterRequestMessage message) {
         scheduler.schedule(() -> {
-            XPaymentAdapterResponseMessage responseMessage = new XPaymentAdapterResponseMessage();
+            final XPaymentAdapterResponseMessage responseMessage = new XPaymentAdapterResponseMessage();
             responseMessage.setPaymentGuid(message.getPaymentGuid());
             responseMessage.setAmount(message.getAmount());
             responseMessage.setCurrency(message.getCurrency());

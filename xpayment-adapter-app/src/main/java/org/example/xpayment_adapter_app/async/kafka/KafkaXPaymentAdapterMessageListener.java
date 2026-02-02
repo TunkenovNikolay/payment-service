@@ -1,9 +1,9 @@
 package org.example.xpayment_adapter_app.async.kafka;
 
+import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.example.xpayment_adapter_app.async.AsyncListener;
 import org.example.xpayment_adapter_app.async.MessageHandler;
 import org.example.xpayment_adapter_app.async.XPaymentAdapterRequestMessage;
-import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -17,7 +17,8 @@ public class KafkaXPaymentAdapterMessageListener implements AsyncListener<XPayme
     private final MessageHandler<XPaymentAdapterRequestMessage> handler;
     private final ObjectMapper objectMapper;
 
-    public KafkaXPaymentAdapterMessageListener(MessageHandler<XPaymentAdapterRequestMessage> handler, ObjectMapper objectMapper) {
+    public KafkaXPaymentAdapterMessageListener(MessageHandler<XPaymentAdapterRequestMessage> handler,
+                                               ObjectMapper objectMapper) {
         this.handler = handler;
         this.objectMapper = objectMapper;
     }
@@ -33,8 +34,9 @@ public class KafkaXPaymentAdapterMessageListener implements AsyncListener<XPayme
         containerFactory = "kafkaListenerContainerFactory")  // ← укажите явно!
     public void consume(ConsumerRecord<String, String> record, Acknowledgment ack) {
         try {
-            String json = record.value();
-            XPaymentAdapterRequestMessage message = objectMapper.readValue(json, XPaymentAdapterRequestMessage.class);
+            final String json = record.value();
+            final XPaymentAdapterRequestMessage message = objectMapper.readValue(json,
+                XPaymentAdapterRequestMessage.class);
 
             log.info("Received XPayment Adapter request: paymentGuid={}, partition={}, offset={}",
                 message.getPaymentGuid(), record.partition(), record.offset());
