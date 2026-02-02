@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: xpayment-adapter-app
+  profiles:
+    active: kafka
+
+logging:
+  level:
+    root: INFO
+    org.springframework.jdbc.core: ERROR
+    org.springframework.web: WARN
+    org.springframework.data: WARN

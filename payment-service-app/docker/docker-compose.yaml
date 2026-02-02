@@ -81,3 +81,14 @@ services:
       - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:9092
     depends_on:
       - kafka
+
+  xpayment-adapter-app:
+    image: xpayment-adapter-app:latest
+    container_name: xpayment-adapter-app
+    ports:
+      - "9090:8080"
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092  # ← КЛЮЧЕВОЕ!
+    depends_on:
+      - kafka
+    restart: unless-stopped
