@@ -1,6 +1,9 @@
-package org.example.payment_service_app.async;
+package org.example.xpayment_adapter_app.dto;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
+import org.example.xpayment_adapter_app.async.Message;
+import org.example.xpayment_adapter_app.async.XPaymentAdapterStatus;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
@@ -17,10 +20,8 @@ import java.util.UUID;
  * идентификатор сообщения
  * и метку времени его возникновения.
  */
-@Data
-@ToString
-@AllArgsConstructor
-@NoArgsConstructor
+@Setter
+@Getter
 public class XPaymentAdapterResponseMessage implements Message {
     /**
      * Уникальный идентификатор сообщения.

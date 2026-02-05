@@ -2,7 +2,7 @@
 FROM eclipse-temurin:21-jre-alpine
 
 # Задаем переменную окружения с названием jar-файла, можно переопределить при сборке
-ARG JAR_FILE=payment-service-app-0.0.1.jar
+ARG JAR_FILE=xpayment-adapter-app-0.0.1.jar
 
 # Создаём рабочую директорию приложения
 WORKDIR /app

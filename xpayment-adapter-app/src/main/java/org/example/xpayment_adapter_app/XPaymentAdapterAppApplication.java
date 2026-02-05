@@ -1,17 +1,14 @@
-package org.example.payment_service_app;
+package org.example.xpayment_adapter_app;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.kafka.annotation.EnableKafka;
-import org.springframework.resilience.annotation.EnableResilientMethods;
 
 @SpringBootApplication
-@EnableResilientMethods
 @EnableKafka
-public class PaymentServiceAppApplication {
+public class XPaymentAdapterAppApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(PaymentServiceAppApplication.class, args);
+        SpringApplication.run(XPaymentAdapterAppApplication.class, args);
     }
-
 }
