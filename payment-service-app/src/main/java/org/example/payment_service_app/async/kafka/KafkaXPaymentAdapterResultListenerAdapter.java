@@ -1,18 +1,18 @@
 package org.example.payment_service_app.async.kafka;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.example.payment_service_app.async.AsyncListener;
 import org.example.payment_service_app.async.MessageHandler;
 import org.example.payment_service_app.async.XPaymentAdapterResponseMessage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 public class KafkaXPaymentAdapterResultListenerAdapter implements AsyncListener<XPaymentAdapterResponseMessage> {
-    private static final Logger log = LoggerFactory.getLogger(KafkaXPaymentAdapterResultListenerAdapter.class);
+
     private final MessageHandler<XPaymentAdapterResponseMessage> handler;
 
     public KafkaXPaymentAdapterResultListenerAdapter(MessageHandler<XPaymentAdapterResponseMessage> handler) {
@@ -26,8 +26,8 @@ public class KafkaXPaymentAdapterResultListenerAdapter implements AsyncListener<
 
     @KafkaListener(
         topics = "${app.kafka.topics.xpayment-adapter.response}",
-        groupId = "${spring.kafka.consumer.group-id}")
-
+        groupId = "${spring.kafka.consumer.group-id}",
+        containerFactory = "kafkaListenerContainerFactory")
     public void consume(XPaymentAdapterResponseMessage message,
                         ConsumerRecord<String, XPaymentAdapterResponseMessage> record,
                         Acknowledgment ack) {

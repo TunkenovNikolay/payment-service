@@ -2,7 +2,7 @@ package org.example.xpayment_adapter_app.async.kafka;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.xpayment_adapter_app.async.AsyncSender;
-import org.example.xpayment_adapter_app.async.XPaymentAdapterResponseMessage;
+import org.example.xpayment_adapter_app.dto.XPaymentAdapterResponseMessage;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;

@@ -48,6 +48,13 @@ public class ServiceException extends RuntimeException {
     }
 
     private String getMessage(String value) {
-        return String.format(this.message, value);
+        if (this.message == null || !this.message.contains("%")) {
+            return this.message != null ? this.message : "";
+        }
+        try {
+            return String.format(this.message, value);
+        } catch (Exception e) {
+            return this.message.replace("%", "%%"); // Экранируем проблемный %
+        }
     }
 }
