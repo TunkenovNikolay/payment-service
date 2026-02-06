@@ -10,7 +10,26 @@ services:
     command: java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005 -jar app.jar
     environment:
       KEYCLOAK_HOST: keycloak:8080
-    restart: unless-stopped
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+
+  xpayment-api:
+    image: xpayment-api-xpayment-api:latest
+    container_name: xpayment-api-xpayment-api
+    ports:
+      - "9999:8080"
+    hostname: xpayment-api
+    environment:
+      SPRING_APPLICATION_NAME: xpayment-api
+      SPRING_SERVER_PORT: 8080
+      SPRING_DATASOURCE_URL: jdbc:h2:mem:testdb
+      SPRING_DATASOURCE_DRIVERCLASSNAME: org.h2.Driver
+      SPRING_DATASOURCE_USERNAME: sa
+      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.H2Dialect
+      LOGGING_LEVEL_ROOT: INFO
+      LOGGING_LEVEL_ORG_SPRINGFRAMEWORK: INFO
+      LOGGING_LEVEL_COM_IPRODY: DEBUG
+      XPAYMENT_PROCESSING_DELAY_MS: 60000
 
   postgres:
     image: postgres
@@ -46,3 +65,73 @@ services:
     volumes:
       - ./realm-export.json:/opt/keycloak/data/import/realm-export.json
     restart: unless-stopped
+
+  kafka:
+    image: bitnamilegacy/kafka:latest
+    container_name: kafka
+    ports:
+      - "9092:9092" # для клиентов из docker-сети (Kafka UI, другие сервисы)
+      - "9093:9093" # для внешних клиентов (ваш хост)
+    environment:
+      - KAFKA_ENABLE_KRAFT=yes
+      - KAFKA_CFG_PROCESS_ROLES=broker,controller
+      - KAFKA_CFG_NODE_ID=1
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka:9094
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+
+    # слушатели
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,EXTERNAL://:9093,CONTROLLER://:9094
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT,CONTROLLER:PLAINTEXT
+
+    # рекламируем: внутри докера - kafka:9092, снаружи - localhost:9093
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092,EXTERNAL://localhost:9093
+
+    # брокеры общаются через PLAINTEXT (у вас кластер из одного узла)
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=PLAINTEXT
+      - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: kafka-ui
+    ports:
+      - "8090:8080"
+    environment:
+      - KAFKA_CLUSTERS_0_NAME=local
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:9092
+    depends_on:
+      - kafka
+
+  xpayment-adapter-app:
+    image: xpayment-adapter-app:latest
+    container_name: xpayment-adapter-app
+    ports:
+      - "9090:8080"
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      XPAYMENT_API_URL: "http://xpayment-api:8080"
+    depends_on:
+      - kafka
+      - xpayment-api
+
+  rabbitmq:
+    image: rabbitmq:4.2-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672" # для подключения клиентов к брокеру
+      - "15672:15672" # для доступа к админке
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+      - ./rabbitmq_delayed_message_exchange-4.2.0.ez:/opt/rabbitmq/plugins/rabbitmq_delayed_message_exchange-4.2.0.ez # делаем доступным в контейнере файл плагина
+    command: >
+      bash -c "
+        rabbitmq-plugins enable --offline rabbitmq_delayed_message_exchange &&
+        rabbitmq-plugins enable rabbitmq_management &&
+        rabbitmq-server
+      "
+    restart: unless-stopped
+
+volumes:
+  rabbitmq_data:

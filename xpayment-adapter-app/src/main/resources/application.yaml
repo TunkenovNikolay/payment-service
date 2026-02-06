@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: xpayment-adapter-app
+  profiles:
+    active: kafka,rabbitmq
+
+app:
+  x-payment-api:
+    client:
+      url: ${APP_X_PAYMENT_API_CLIENT_URL:http://xpayment-api:8080}
+      username: paymentAgentIprody
+      password: iprodyTestPassword0123
+      account: paymentAgentIprodyApiToken
+
+logging:
+  level:
+    root: INFO
+    org.springframework.jdbc.core: ERROR
+    org.springframework.web: WARN
+    org.springframework.data: WARN
+    org.springframework.amqp: DEBUG

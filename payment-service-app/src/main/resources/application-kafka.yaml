@@ -1,0 +1,35 @@
+spring:
+
+  kafka:
+    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:kafka:9092}
+    producer:
+      # Acknowledgment level:
+      # "0": Producer does not wait for any acknowledgment from the broker (highest throughput, lowest durability).
+      # "1": Producer waits for only the leader broker to acknowledge (balance between throughput and durability).
+      # "all" (or "-1"): Producer waits for all in-sync replicas to acknowledge (lowest throughput, highest durability/guarantee of no message loss).
+      acks: 0 # Recommended for high reliability
+      # Other useful properties for reliability:
+      retries: 3 # Number of times to retry a failed send
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: xpayment-adapter-result-consumers
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+    properties:
+      spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
+      spring.json.use.type.headers: false
+      spring.json.trusted.packages: "*"
+      spring.json.value.default.type: "org.example.payment_service_app.async.XPaymentAdapterResponseMessage"
+    listener:
+      ack-mode: manual
+      concurrency: 1
+
+app:
+  kafka:
+    topics:
+      xpayment-adapter:
+        request: xpayment-adapter.requests
+        response: xpayment-adapter.responses
