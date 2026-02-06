@@ -112,3 +112,26 @@ services:
     depends_on:
       - kafka
       - xpayment-api
+
+  rabbitmq:
+    image: rabbitmq:4.2-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672" # для подключения клиентов к брокеру
+      - "15672:15672" # для доступа к админке
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+      - ./rabbitmq_delayed_message_exchange-4.2.0.ez:/opt/rabbitmq/plugins/rabbitmq_delayed_message_exchange-4.2.0.ez # делаем доступным в контейнере файл плагина
+    command: >
+      bash -c "
+        rabbitmq-plugins enable --offline rabbitmq_delayed_message_exchange &&
+        rabbitmq-plugins enable rabbitmq_management &&
+        rabbitmq-server
+      "
+    restart: unless-stopped
+
+volumes:
+  rabbitmq_data:

@@ -2,7 +2,7 @@ spring:
   application:
     name: xpayment-adapter-app
   profiles:
-    active: kafka
+    active: kafka,rabbitmq
 
 app:
   x-payment-api:
@@ -18,3 +18,4 @@ logging:
     org.springframework.jdbc.core: ERROR
     org.springframework.web: WARN
     org.springframework.data: WARN
+    org.springframework.amqp: DEBUG
