@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.UUID;
 
+import static org.example.payment_service_app.exception.ErrorMessage.PAYMENT_NOT_EXIST;
 import static org.example.payment_service_app.util.TimeUtil.getNow;
 
 @Slf4j
@@ -46,7 +47,7 @@ public class PaymentServiceImpl implements PaymentService {
     public PaymentDto getPaymentByUuid(UUID id) {
         return paymentRepository.findById(id)
             .map(paymentMapper::toDto)
-            .orElseThrow(() -> new ServiceException(ErrorMessage.PAYMENT_NOT_EXIST, id));
+            .orElseThrow(() -> new ServiceException(PAYMENT_NOT_EXIST, id));
     }
 
     public List<PaymentDto> getAllPayments() {
@@ -89,7 +90,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     public void deletePayment(UUID id) {
         if (!paymentRepository.existsById(id)) {
-            throw new ServiceException(ErrorMessage.PAYMENT_NOT_EXIST, id);
+            throw new ServiceException(PAYMENT_NOT_EXIST, id);
         }
         paymentRepository.deleteById(id);
     }
@@ -97,7 +98,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public PaymentDto updateStatus(UUID id, PaymentStatus paymentStatus) {
         final Payment payment = paymentRepository.findById(id)
-            .orElseThrow(() -> new ServiceException(ErrorMessage.PAYMENT_NOT_EXIST, id));
+            .orElseThrow(() -> new ServiceException(PAYMENT_NOT_EXIST, id));
 
         payment.setStatus(paymentStatus);
         payment.setUpdatedAt(getNow());

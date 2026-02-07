@@ -1,0 +1,46 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: payment-service-liquibase-migrate
+  namespace: default  # тот же namespace что и приложение
+spec:
+  template:
+    spec:
+      restartPolicy: Never  # Job не рестартуется при ошибке
+      containers:
+        - name: liquibase-migrate
+          image: payment-service:latest
+          imagePullPolicy: Never
+          command:
+            - /bin/sh
+            - -c
+            - |
+              echo "=== Создание БД и миграции ==="
+              apk add --no-cache netcat-openbsd postgresql-client
+              
+              # Ждём PostgreSQL
+              echo "Ожидание PostgreSQL..."
+              until nc -z my-pg-postgresql.db.svc.cluster.local 5432; do
+                echo "PostgreSQL не готов - ждём..."
+                sleep 2
+              done
+              
+              # Создаём БД если не существует
+              echo "Создание БД payment-db..."
+              createdb -h my-pg-postgresql.db.svc.cluster.local -U postgres payment-db || true
+              
+              # Выполняем миграции
+              echo "Запуск Liquibase..."
+              cd /app
+              java -jar app.jar liquibase:update
+              
+              echo "✅ Миграции завершены успешно!"
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: "jdbc:postgresql://my-pg-postgresql.db.svc.cluster.local:5432/payment-db"
+            - name: SPRING_DATASOURCE_USERNAME
+              value: "postgres"
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: "secret"
+            - name: PGPASSWORD
+              value: "secret"  # для createdb
