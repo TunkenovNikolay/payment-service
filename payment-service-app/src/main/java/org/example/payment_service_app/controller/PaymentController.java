@@ -1,12 +1,12 @@
 package org.example.payment_service_app.controller;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.payment_service_app.config.security.UserContext;
 import org.example.payment_service_app.model.dto.PaymentDto;
 import org.example.payment_service_app.model.dto.PaymentFilterDto;
 import org.example.payment_service_app.model.dto.PaymentStatusUpdateDto;
 import org.example.payment_service_app.service.PaymentService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -21,15 +21,10 @@ import java.util.UUID;
 @Slf4j
 @RestController
 @RequestMapping("/payments")
+@RequiredArgsConstructor
 public class PaymentController {
     private final PaymentService paymentService;
     private final UserContext userContext;
-
-    @Autowired
-    public PaymentController(PaymentService paymentService, UserContext userContext) {
-        this.paymentService = paymentService;
-        this.userContext = userContext;
-    }
 
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('USER')")

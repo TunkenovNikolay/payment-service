@@ -1,5 +1,6 @@
 package org.example.payment_service_app.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.payment_service_app.async.AsyncSender;
 import org.example.payment_service_app.async.XPaymentAdapterRequestMessage;
@@ -13,7 +14,6 @@ import org.example.payment_service_app.model.entity.Payment;
 import org.example.payment_service_app.model.entity.PaymentStatus;
 import org.example.payment_service_app.repository.PaymentRepository;
 import org.example.payment_service_app.repository.specification.PaymentFilterFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -28,21 +28,12 @@ import static org.example.payment_service_app.util.TimeUtil.getNow;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class PaymentServiceImpl implements PaymentService {
     private final PaymentRepository paymentRepository;
     private final PaymentMapper paymentMapper;
     private final XPaymentAdapterMapper xPaymentAdapterMapper;
     private final AsyncSender<XPaymentAdapterRequestMessage> sender;
-
-    @Autowired
-    public PaymentServiceImpl(final PaymentRepository paymentRepository, final PaymentMapper paymentMapper,
-                              final XPaymentAdapterMapper xPaymentAdapterMapper,
-                              final AsyncSender<XPaymentAdapterRequestMessage> sender) {
-        this.paymentRepository = paymentRepository;
-        this.paymentMapper = paymentMapper;
-        this.xPaymentAdapterMapper = xPaymentAdapterMapper;
-        this.sender = sender;
-    }
 
     public PaymentDto getPaymentByUuid(UUID id) {
         return paymentRepository.findById(id)
