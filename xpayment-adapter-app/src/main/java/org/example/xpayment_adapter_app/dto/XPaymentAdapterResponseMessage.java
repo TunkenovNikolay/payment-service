@@ -1,7 +1,9 @@
-package org.example.xpayment_adapter_app.async;
+package org.example.xpayment_adapter_app.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.example.xpayment_adapter_app.async.Message;
+import org.example.xpayment_adapter_app.async.XPaymentAdapterStatus;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
