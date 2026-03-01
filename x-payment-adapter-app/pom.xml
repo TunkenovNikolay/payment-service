@@ -11,9 +11,9 @@
     </parent>
 
     <groupId>org.example</groupId>
-    <artifactId>xpayment-adapter-app</artifactId>
+    <artifactId>x-payment-adapter-app</artifactId>
     <version>0.0.1</version>
-    <name>xpayment-adapter-app</name>
+    <name>x-payment-adapter-app</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>

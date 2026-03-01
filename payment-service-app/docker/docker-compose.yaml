@@ -101,9 +101,9 @@ services:
     depends_on:
       - kafka
 
-  xpayment-adapter-app:
-    image: xpayment-adapter-app:latest
-    container_name: xpayment-adapter-app
+  x-payment-adapter-app:
+    image: x-payment-adapter-app:latest
+    container_name: x-payment-adapter-app
     ports:
       - "9090:8080"
     environment:

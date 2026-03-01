@@ -1,6 +1,6 @@
 spring:
   application:
-    name: xpayment-adapter-app
+    name: x-payment-adapter-app
   profiles:
     active: kafka,rabbitmq
 
