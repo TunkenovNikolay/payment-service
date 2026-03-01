@@ -1,0 +1,15 @@
+spring:
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: admin
+    password: admin
+
+    exchange-name: payment-state-check-exchange
+    queue-name: payment-state-check-queue
+    delayed-exchange-name: payment-state-check-exchange
+    dlx-exchange-name: payment-state-check-dlx-exchange
+    dlx-routing-key: payment-state-check-dlx-queue
+
+    max-retries: 30
+    interval-ms: 60000

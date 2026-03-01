@@ -12,6 +12,8 @@ import org.example.xpayment_adapter_app.mapper.XPaymentApiMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 
+import java.util.UUID;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -28,6 +30,16 @@ class XPaymentProviderGatewayImpl implements XPaymentProviderGateway {
         } catch (ApiException e) {
             log.error(e.getMessage());
             throw new RestClientException(e.getMessage());
+        }
+    }
+
+    @Override
+    public ChargeResponseDto retrieveCharge(UUID id) throws RestClientException {
+        try {
+            return xPaymentApiMapper.responseToResponseDto(defaultApi.retrieveCharge(id));
+        } catch (ApiException ex) {
+            log.error(ex.getMessage());
+            throw new RestClientException(ex.getMessage());
         }
     }
 
