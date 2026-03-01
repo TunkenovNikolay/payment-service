@@ -1,4 +1,4 @@
-package org.example;
+package org.example.xpayment_adapter_app;
 
 import java.io.*;
 import java.net.ServerSocket;
