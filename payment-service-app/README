@@ -6,13 +6,12 @@ BASE_URL=http://localhost:8081/payments
 # ============================================
 # 1. CREATE - Создание нового платежа (POST)
 # ============================================
-curl -X POST "${BASE_URL}" \
+curl -X POST "http://localhost:8081/payments" \
   -H "Content-Type: application/json" \
   -d '{
     "inquiryRefId": "607ed0ea-cb8a-4ff8-a694-1213c314e65c",
     "amount": 100.50,
     "currency": "USD",
-    "status": "CREATED",
     "note": "Test payment creation"
   }'
 
@@ -64,7 +63,6 @@ curl -X PUT "${BASE_URL}/{id}" \
     "inquiryRefId": "607ed0ea-cb8a-4ff8-a694-1213c314e65c",
     "amount": 150.75,
     "currency": "EUR",
-    "status": "PROCESSING",
     "note": "Updated payment",
     "createdAt": "2025-01-01T12:00:00Z",
     "updatedAt": "2025-01-02T12:00:00Z"
@@ -78,7 +76,6 @@ curl -X PUT "${BASE_URL}/{id}" \
 #     "inquiryRefId": "607ed0ea-cb8a-4ff8-a694-1213c314e65c",
 #     "amount": 150.75,
 #     "currency": "EUR",
-#     "status": "PROCESSING",
 #     "note": "Updated payment"
 #   }'
 
@@ -119,7 +116,6 @@ curl -X DELETE "${BASE_URL}/{id}"
 #     "inquiryRefId": "607ed0ea-cb8a-4ff8-a694-1213c314e65c",
 #     "amount": 100.50,
 #     "currency": "USD",
-#     "status": "CREATED",
 #     "note": "Test payment"
 #   }' | jq -r '.guid')
 #
@@ -175,7 +171,6 @@ curl -X POST "${PAYMENT_SERVICE_URL}" \
     "inquiryRefId": "607ed0ea-cb8a-4ff8-a694-1213c314e65c",
     "amount": 100.50,
     "currency": "USD",
-    "status": "CREATED",
     "note": "Test payment creation"
   }'
 
@@ -221,7 +216,6 @@ curl -X PUT "${PAYMENT_SERVICE_URL}/{id}" \
     "inquiryRefId": "607ed0ea-cb8a-4ff8-a694-1213c314e65c",
     "amount": 150.75,
     "currency": "EUR",
-    "status": "PROCESSING",
     "note": "Updated payment"
   }'
 
@@ -256,7 +250,6 @@ curl -X POST "${PAYMENT_SERVICE_URL}" \
     "inquiryRefId": "607ed0ea-cb8a-4ff8-a694-1213c314e65c",
     "amount": 100.50,
     "currency": "USD",
-    "status": "CREATED"
   }'
 
 # Попытка создать платеж с токеном reader (должна вернуть 403 Forbidden)
@@ -267,7 +260,6 @@ curl -X POST "${PAYMENT_SERVICE_URL}" \
     "inquiryRefId": "607ed0ea-cb8a-4ff8-a694-1213c314e65c",
     "amount": 100.50,
     "currency": "USD",
-    "status": "CREATED"
   }'
 
 # Попытка просмотреть платеж с токеном reader (должна быть успешной)
