@@ -12,6 +12,16 @@ app:
       password: iprodyTestPassword0123
       account: paymentAgentIprodyApiToken
 
+management:
+  tracing:
+    sampling:
+      probability: 1.0 # 100% для отладки; в продакшн должен быть меньше
+    propagation:
+      type: w3c,b3 # чтобы понимать и traceparent, и b3
+  zipkin:
+    tracing:
+      endpoint: http://zipkin:9411/api/v2/spans
+
 logging:
   level:
     root: INFO

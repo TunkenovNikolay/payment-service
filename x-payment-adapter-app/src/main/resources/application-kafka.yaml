@@ -25,6 +25,10 @@ spring:
     listener:
       ack-mode: manual
       concurrency: 1
+      observation-enabled: true
+
+    template:
+      observation-enabled: true
 
 app:
   kafka:
