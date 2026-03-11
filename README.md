@@ -3,6 +3,7 @@
 [![Java](https://img.shields.io/badge/Java-21-blue.svg)](https://openjdk.org/projects/jdk/21/)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.0.0-brightgreen.svg)](https://spring.io/projects/spring-boot)
 [![Apache Kafka](https://img.shields.io/badge/Apache%20Kafka-3.9.0-red.svg)](https://kafka.apache.org/)
+[![RabbitMQ](https://img.shields.io/badge/RabbitMQ-4.0-ff6600.svg)](https://www.rabbitmq.com/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-17-blue.svg)](https://www.postgresql.org/)
 [![Keycloak](https://img.shields.io/badge/Keycloak-24.0.3-blueviolet.svg)](https://www.keycloak.org/)
 [![Kubernetes](https://img.shields.io/badge/Kubernetes-Manifests-326CE5.svg)](https://kubernetes.io/)
@@ -35,7 +36,7 @@ payment-service/
 | **Фреймворк** | Spring Boot 4.0.0 |
 | **База данных** | PostgreSQL 17, JPA (Hibernate), Liquibase |
 | **Безопасность** | Spring Security, OAuth2 Resource Server (Keycloak 24.0.3) |
-| **Асинхронность** | Apache Kafka, Spring Kafka |
+| **Асинхронность** | Apache Kafka, RabbitMQ, Spring Kafka, Spring AMQP |
 | **Наблюдаемость** | Micrometer Tracing, Zipkin Brave, Actuator |
 | **Маппинг** | MapStruct 1.6.3 |
 | **Валидация** | Bean Validation |
@@ -118,6 +119,33 @@ sort — сортировка (например, createdAt,desc)
 | **Auto offset reset** | `earliest` |
 | **Commit mode** | Manual (ручное подтверждение) |
 | **Concurrency** | 1 поток |
+
+### RabbitMQ (в `x-payment-adapter-app`)
+
+#### Конфигурация
+
+| Параметр | Значение |
+|----------|----------|
+| **Host** | `rabbitmq` |
+| **Port** | `5672` |
+| **Username** | `admin` |
+| **Password** | `admin` |
+
+#### Очереди и обменники
+
+| Компонент | Назначение |
+|-----------|------------|
+| `payment-state-check-exchange` | Основной обменник для проверки статуса |
+| `payment-state-check-queue` | Очередь для проверки статуса |
+| `payment-state-check-dlx-exchange` | Dead Letter Exchange для отложенных повторных попыток |
+| `payment-state-check-dlx-queue` | Dead Letter очередь с повторными попытками |
+
+#### Механизм повторных попыток
+
+| Параметр | Значение | Описание |
+|----------|----------|----------|
+| **Max retries** | `30` | Максимальное количество повторных попыток |
+| **Interval** | `60000 ms` | Интервал между попытками (1 минута) |
 
 ## 📊 Мониторинг и наблюдаемость
 
